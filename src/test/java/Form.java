@@ -3,6 +3,9 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 public class Form {
     public static void main(String[] args) throws InterruptedException {
@@ -34,9 +37,14 @@ public class Form {
         datePicker.sendKeys(Keys.ENTER);
         submitButton.click();
 
-        Thread.sleep(3000);
+        // Wait for successful page is appeared
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        WebElement alert = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("alert")));
+
+        // Create TestNG based assertion for successful text
+        String alertText = alert.getText();
+        Assert.assertEquals(alertText, "The form was successfully submitted!");
 
         driver.quit();
-
     }
 }

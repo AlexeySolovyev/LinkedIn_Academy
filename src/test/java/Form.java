@@ -14,6 +14,13 @@ public class Form {
         WebDriver driver = new ChromeDriver();
         driver.get("https://formy-project.herokuapp.com/form");
 
+        submitForm(driver);
+        waitForAlertBanner(driver);
+        Assert.assertEquals(getAlertBannerText(driver), "The form was successfully submitted!");
+        driver.quit();
+    }
+
+    public static void submitForm(WebDriver driver) {
         WebElement firstNameField = driver.findElement(By.id("first-name"));
         WebElement lasNameField = driver.findElement(By.id("last-name"));
         WebElement jobTitleField = driver.findElement(By.id("job-title"));
@@ -36,15 +43,14 @@ public class Form {
         datePicker.sendKeys("12/12/2015");
         datePicker.sendKeys(Keys.ENTER);
         submitButton.click();
+    }
 
-        // Wait for successful page is appeared
+    public static void waitForAlertBanner(WebDriver driver) {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         WebElement alert = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("alert")));
+    }
 
-        // Create TestNG based assertion for successful text
-        String alertText = alert.getText();
-        Assert.assertEquals(alertText, "The form was successfully submitted!");
-
-        driver.quit();
+    public static String getAlertBannerText(WebDriver driver) {
+        return driver.findElement(By.className("alert")).getText();
     }
 }
